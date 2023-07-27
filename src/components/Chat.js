@@ -20,20 +20,19 @@ export const Chat = ({ room }) => {
   useEffect(() => {
     const queryMessages = query(
       messagesRef,
-      where("room", "==", room),
+      where("room", "==", room), // The room prop as the query parameter
       orderBy("createdAt")
     );
-    const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
+    const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
       snapshot.forEach((doc) => {
         messages.push({ ...doc.data(), id: doc.id });
       });
-      console.log(messages);
       setMessages(messages);
     });
 
-    return () => unsuscribe();
-  }, []);
+    return () => unsubscribe();
+  }, [room]); // Add room as a dependency
 
   const handleSubmit = async (event) => {
     event.preventDefault();
